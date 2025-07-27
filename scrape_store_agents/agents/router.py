@@ -117,6 +117,12 @@ class IntelligentScraperRouter:
         try:
             parsed_url = urlparse(url)
             
+            # Prepare HTML sample string for prompt
+            if sample_html:
+                html_sample_str = f"HTML Sample (first 2000 chars):\n{sample_html[:2000]}\n"
+            else:
+                html_sample_str = ""
+            
             # Build analysis prompt
             prompt = f"""
             Analyze this website for optimal web scraping strategy:
@@ -125,7 +131,7 @@ class IntelligentScraperRouter:
             Domain: {parsed_url.netloc}
             Path: {parsed_url.path}
             
-            {f"HTML Sample (first 2000 chars):\\n{sample_html[:2000]}\\n" if sample_html else ""}
+            {html_sample_str}
             
             Please analyze:
             1. Site type (news, blog, e-commerce, documentation, social media, etc.)

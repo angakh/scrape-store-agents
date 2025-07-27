@@ -75,6 +75,24 @@ body {
     color: var(--text-primary);
 }
 
+.external-link {
+    display: block;
+    text-decoration: none;
+    color: var(--primary-color);
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.external-link:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-1px);
+}
+
 /* Sections */
 .section {
     background: white;

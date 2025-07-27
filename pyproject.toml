@@ -58,7 +58,11 @@ dev = [
 opentelemetry = [
     "opentelemetry-api>=1.24.0",
     "opentelemetry-sdk>=1.24.0",
-    "opentelemetry-exporter-otlp>=1.24.0"
+    "opentelemetry-exporter-otlp>=1.24.0",
+    "opentelemetry-instrumentation-fastapi",
+    "opentelemetry-instrumentation-requests",
+    "opentelemetry-instrumentation-logging",
+    "opentelemetry-instrumentation-aiohttp-client"
 ]
 
 [project.scripts]

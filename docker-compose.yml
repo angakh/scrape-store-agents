@@ -16,6 +16,7 @@ services:
       - VECTOR_STORE_PERSIST_DIR=/home/app/data/chroma
       - LOG_LEVEL=INFO
       - LOG_FILE=/home/app/logs/scrape-store-agents.log
+      - DOCKER=true
     depends_on:
       - chromadb
     restart: unless-stopped
@@ -96,6 +97,17 @@ services:
     restart: unless-stopped
     profiles:
       - scheduler
+
+  # Jaeger for OpenTelemetry trace collection
+  jaeger:
+    image: jaegertracing/jaeger:2.0.0
+    ports:
+      - "16686:16686"  # Jaeger UI
+      - "4317:4317"    # OTLP gRPC receiver
+      - "4318:4318"    # OTLP HTTP receiver
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    restart: unless-stopped
 
 volumes:
   chromadb_data:

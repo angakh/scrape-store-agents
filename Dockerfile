@@ -15,9 +15,9 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY pyproject.toml /tmp/
 WORKDIR /tmp
 
-# Install Python dependencies
+# Install Python dependencies including OpenTelemetry
 RUN pip install --upgrade pip setuptools wheel && \
-    pip install -e .
+    pip install -e .[opentelemetry]
 
 # Production stage
 FROM python:3.11-slim

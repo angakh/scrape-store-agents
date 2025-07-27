@@ -3,7 +3,7 @@
 # The config.yml file will be gitignored to protect your API keys
 
 # API Keys for AI services
-api:
+api_keys:
   # OpenAI API key for GPT models
   # Get from: https://platform.openai.com/api-keys
   openai_api_key: "your-openai-api-key-here"
@@ -37,6 +37,9 @@ ai:
 
 # Web Scraper Configuration
 scraper:
+  # Scraper type: "default" (more types coming)
+  type: "default"
+
   # Default timeout for web requests (seconds)
   timeout: 30
   
@@ -209,3 +212,13 @@ security:
   
   # Enable rate limiting for API endpoints
   api_rate_limiting: true
+
+# OpenTelemetry / Observability Configuration
+opentelemetry:
+  enabled: false  # Set to true to enable OpenTelemetry tracing/metrics
+  service_name: "scrape-store-agents"
+  exporter: "otlp"  # Options: "otlp", "jaeger", "console"
+  otlp_endpoint: "http://localhost:4317"  # OTLP collector endpoint
+  jaeger_agent_host: "localhost"
+  jaeger_agent_port: 6831
+  # Additional options can be added as needed

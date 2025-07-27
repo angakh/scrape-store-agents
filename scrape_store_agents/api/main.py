@@ -135,19 +135,22 @@ ai_available: bool = False
 start_time = datetime.utcnow()
 
 
-# Add OpenTelemetry setup if enabled
-try:
-    import scrape_store_agents.opentelemetry_setup
-except ImportError:
-    pass
-
-
 def create_app(config_path: Optional[str] = None) -> FastAPI:
     """Create and configure FastAPI application."""
     global agent, ai_agent, ai_router, self_improving_agent, settings, ai_config, ai_available
     
     # Load configuration
     settings = load_config(config_path)
+    
+    # Add OpenTelemetry setup if enabled in config
+    if hasattr(settings, 'opentelemetry') and settings.opentelemetry.enabled:
+        try:
+            import scrape_store_agents.opentelemetry_setup
+            logger.info("OpenTelemetry tracing enabled")
+        except ImportError as e:
+            logger.warning(f"OpenTelemetry setup failed: {e}")
+    else:
+        logger.info("OpenTelemetry tracing disabled")
     
     # Setup CORS
     app.add_middleware(

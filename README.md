@@ -12,7 +12,7 @@ An **AI-powered** web scraping and vector storage framework with intelligent rea
 # 1. Clone and start with Docker
 git clone https://github.com/angakh/scrape-store-agents.git
 cd scrape-store-agents
-docker-compose up -d
+docker compose up -d
 
 # 2. Open the Web Dashboard
 open http://localhost:8000
@@ -92,7 +92,7 @@ That's it! You now have a **web dashboard** with a searchable vector database of
 ```bash
 git clone https://github.com/angakh/scrape-store-agents.git
 cd scrape-store-agents
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Option 2: Local Installation
@@ -525,19 +525,19 @@ class CustomVectorStore(BaseVectorStore):
 
 ### Basic Deployment
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Production Deployment
 ```bash
 # With nginx proxy and SSL
-docker-compose --profile production up -d
+docker compose --profile production up -d
 
 # With automatic scheduling
-docker-compose --profile scheduler up -d
+docker compose --profile scheduler up -d
 
 # With ChromaDB UI
-docker-compose --profile ui up -d
+docker compose --profile ui up -d
 ```
 
 ### Environment Variables
@@ -572,7 +572,7 @@ curl http://localhost:8000/stats
 
 ### Logs
 ```bash
-docker-compose logs -f scrape-store-agents
+docker compose logs -f scrape-store-agents
 ```
 
 ## 🧪 Testing

@@ -154,6 +154,17 @@ class LoggingConfig(BaseModel):
     )
 
 
+class OpenTelemetryConfig(BaseModel):
+    """Configuration for OpenTelemetry observability."""
+    
+    enabled: bool = Field(default=False, description="Enable OpenTelemetry tracing/metrics")
+    service_name: str = Field(default="scrape-store-agents", description="Service name for traces")
+    exporter: str = Field(default="otlp", description="Exporter type (otlp, jaeger, console)")
+    otlp_endpoint: str = Field(default="http://localhost:4317", description="OTLP collector endpoint")
+    jaeger_agent_host: str = Field(default="localhost", description="Jaeger agent host")
+    jaeger_agent_port: int = Field(default=6831, description="Jaeger agent port")
+
+
 class Settings(BaseModel):
     """Main application settings."""
     
@@ -163,6 +174,7 @@ class Settings(BaseModel):
     vector_store: VectorStoreConfig = Field(default_factory=VectorStoreConfig)
     api: APIConfig = Field(default_factory=APIConfig)
     logging: LoggingConfig = Field(default_factory=LoggingConfig)
+    opentelemetry: OpenTelemetryConfig = Field(default_factory=OpenTelemetryConfig)
     sources: List[SourceConfig] = Field(
         default_factory=list,
         description="List of scraping sources"
