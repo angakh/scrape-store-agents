@@ -472,70 +472,22 @@ cleared_stats = self_improving_agent.clear_learning_data()
 print(f"Cleared {cleared_stats['extraction_history']} extraction records")
 ```
 
-## 🧠 AI Workflows
+## 📈 Observability & Tracing (OpenTelemetry)
 
-### 🎯 Smart URL Analysis
-Perfect for understanding websites before scraping:
+Scrape Store Agents now supports OpenTelemetry for distributed tracing and metrics. This enables you to monitor, trace, and analyze backend performance using tools like Jaeger, Prometheus, or Grafana.
 
-```bash
-# Analyze any URL with AI
-scrape-store analyze https://complex-site.com --detailed
+- Tracing and metrics are emitted from the backend (FastAPI, ChromaDB, etc.)
+- Data is exported to an OTLP-compatible backend (e.g., Jaeger, OpenTelemetry Collector)
+- See `scrape_store_agents/opentelemetry_setup.py` for setup details
+- To enable, install the optional dependencies:
+  ```bash
+  pip install "opentelemetry-api>=1.24.0" "opentelemetry-sdk>=1.24.0" "opentelemetry-exporter-otlp>=1.24.0" \
+    "opentelemetry-instrumentation-fastapi" "opentelemetry-instrumentation-requests" \
+    "opentelemetry-instrumentation-logging" "opentelemetry-instrumentation-aiohttp-client"
+  ```
+- Start a Jaeger or Prometheus backend to view traces/metrics
 
-# Web Dashboard: Use "Analyze URL" button
-# API: POST /analyze with URL
-```
-
-**AI provides:**
-- Site type detection (news, blog, e-commerce, docs)
-- Complexity assessment (simple, moderate, complex, dynamic)
-- Anti-bot measures identification
-- Optimal scraping strategy recommendations
-- Confidence scores for all decisions
-
-### 🤖 Intelligent Scraping
-AI automatically selects the best approach:
-
-```bash
-# CLI with AI analysis before scraping
-scrape-store scrape https://example.com --ai --ai-analyze
-
-# Web Dashboard: Check "Use AI" and "Analyze First"
-# API: POST /scrape with use_ai: true, analyze_first: true
-```
-
-**AI capabilities:**
-- **Smart Scraper Selection**: Chooses optimal scraper based on site analysis
-- **Dynamic Configuration**: Adjusts timeouts, delays, and selectors automatically
-- **Adaptive Learning**: Learns from failures and improves strategies
-- **Graceful Fallback**: Falls back to standard scraping if AI fails
-
-### 📊 AI Performance Monitoring
-Track AI decision-making and improvements:
-
-```bash
-# CLI status includes AI metrics
-scrape-store status
-
-# API endpoints for AI monitoring
-GET /ai/config    # Configuration status
-GET /ai/stats     # Performance metrics
-POST /ai/clear-cache  # Reset AI memory
-```
-
-**Metrics tracked:**
-- URL analyses performed
-- Strategy adaptations made
-- Scraper selection accuracy
-- Cache hit rates
-- Memory usage
-
-### 🔄 Continuous Learning
-AI agents improve over time:
-
-- **Memory System**: Remembers successful strategies for similar sites
-- **Failure Analysis**: Learns from scraping failures and adapts
-- **Pattern Recognition**: Identifies common site structures and anti-bot measures
-- **Strategy Optimization**: Refines approaches based on success rates
+> Note: Telemetry is not shown in the web dashboard, but you can link to your observability UI (Jaeger, Grafana, etc.)
 
 ## 🔌 Extending the Framework
 
@@ -676,6 +628,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] Real-time scraping with webhooks
 - [ ] Export functionality (search results, configurations)
 - [ ] Dark mode for web interface
+- [ ] **OpenTelemetry integration for tracing/metrics** (Jaeger, Prometheus, Grafana, etc.)
+- [ ] **Observability dashboard links in web UI**
 
 ---
 

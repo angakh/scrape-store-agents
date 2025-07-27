@@ -178,11 +178,9 @@ class ChromaDBStore(BaseVectorStore):
                     query_params['where'] = chroma_filters
             
             # Execute search
-            results = await loop.run_in_executor(
-                None,
-                self.collection.query,
-                **query_params
-            )
+            from functools import partial
+            func = partial(self.collection.query, **query_params)
+            results = await loop.run_in_executor(None, func)
             
             # Convert results to SearchResult objects
             search_results = []

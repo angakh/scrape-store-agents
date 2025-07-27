@@ -135,6 +135,13 @@ ai_available: bool = False
 start_time = datetime.utcnow()
 
 
+# Add OpenTelemetry setup if enabled
+try:
+    import scrape_store_agents.opentelemetry_setup
+except ImportError:
+    pass
+
+
 def create_app(config_path: Optional[str] = None) -> FastAPI:
     """Create and configure FastAPI application."""
     global agent, ai_agent, ai_router, self_improving_agent, settings, ai_config, ai_available
