@@ -1,0 +1,131 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE and Editor specific
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.vim/
+.nvim/
+.emacs.d/
+.sublime-project
+.sublime-workspace
+*.sublime-*
+.atom/
+.brackets.json
+.editorconfig
+
+# Claude Code CLI
+.claude/
+
+# Other AI/ML tools
+.cursor/
+.copilot/
+.github-copilot/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Data and databases
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# ChromaDB
+chroma/
+.chroma/
+
+# Configuration (keep defaults, ignore user customizations)
+config/config.yml
+config/sources.local.yaml
+config/*.local.yaml
+.env
+.env.local
+.env.*.local
+
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/
+.tox/
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# PyCharm
+.idea/
+
+# Rope
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Docker
+.dockerignore
+
+# SSL certificates
+ssl/
+*.pem
+*.key
+*.crt
+
+# Backup files
+*.bak
+*.backup

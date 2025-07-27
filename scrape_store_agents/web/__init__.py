@@ -1,0 +1,1 @@
+"""Web interface module for scrape-store-agents."""

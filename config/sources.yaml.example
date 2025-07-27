@@ -1,0 +1,122 @@
+# Example configuration for scrape-store-agents
+# Copy this file to sources.yaml and customize for your needs
+
+# Scraper configuration
+scraper:
+  type: web
+  timeout: 30
+  max_content_length: 10485760  # 10MB
+  extract_links: true
+  max_depth: 2
+  allowed_domains: []  # Empty means all domains allowed
+  blocked_domains: []
+  content_selectors:
+    - main
+    - article
+    - .content
+    - .post-content
+    - .entry-content
+  title_selectors:
+    - h1
+    - title
+    - .title
+    - .headline
+
+# Vector store configuration
+vector_store:
+  type: chromadb
+  collection_name: documents
+  embedding_model: all-MiniLM-L6-v2
+  distance_metric: cosine
+  persist_directory: ./data/chroma
+  # For remote ChromaDB server:
+  # host: localhost
+  # port: 8000
+
+# API server configuration
+api:
+  host: 0.0.0.0
+  port: 8000
+  debug: false
+  cors_origins:
+    - "*"
+
+# Logging configuration
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: scrape-store-agents.log
+
+# Scraping sources
+sources:
+  # Documentation site example
+  - name: python-docs
+    url: https://docs.python.org/3/
+    scraper_type: web
+    enabled: true
+    schedule: "0 2 * * 0"  # Weekly on Sunday at 2 AM
+    custom_config:
+      max_depth: 3
+      content_selectors:
+        - .body
+        - .document
+      allowed_domains:
+        - docs.python.org
+
+  # Blog example
+  - name: real-python-blog
+    url: https://realpython.com/
+    scraper_type: web
+    enabled: true
+    schedule: "0 */6 * * *"  # Every 6 hours
+    custom_config:
+      extract_links: true
+      max_depth: 2
+      content_selectors:
+        - .article-content
+        - .tutorial-content
+      title_selectors:
+        - .article-title
+        - h1
+
+  # News site example
+  - name: tech-news
+    url: https://news.ycombinator.com/
+    scraper_type: web
+    enabled: false  # Disabled by default
+    custom_config:
+      extract_links: false
+      content_selectors:
+        - .storylink
+        - .comment
+
+  # Company documentation example
+  - name: fastapi-docs
+    url: https://fastapi.tiangolo.com/
+    scraper_type: web
+    enabled: true
+    custom_config:
+      max_depth: 4
+      allowed_domains:
+        - fastapi.tiangolo.com
+      content_selectors:
+        - .md-content
+        - main
+
+  # E-commerce example (for product information)
+  - name: product-catalog
+    url: https://example-store.com/products
+    scraper_type: web
+    enabled: false
+    custom_config:
+      extract_links: true
+      max_depth: 2
+      content_selectors:
+        - .product-description
+        - .product-details
+      title_selectors:
+        - .product-title
+        - h1
+      custom_metadata:
+        source_type: ecommerce
+        category: products

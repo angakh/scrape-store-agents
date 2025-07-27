@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕷️ Scrape Store Agents Dashboard</title>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container" id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-spider"></i> Scrape Store Agents</h1>
+                <div class="header-stats">
+                    <div class="stat">
+                        <span class="stat-label">Documents:</span>
+                        <span class="stat-value" id="doc-count">-</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Status:</span>
+                        <span class="stat-value" id="health-status">-</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Quick Actions -->
+            <section class="section">
+                <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+                <div class="quick-actions">
+                    <div class="action-card">
+                        <h3><i class="fas fa-search"></i> Search Documents</h3>
+                        <div class="search-form">
+                            <input type="text" id="search-query" placeholder="Search for anything..." class="search-input">
+                            <button onclick="performSearch()" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                        <div class="search-options">
+                            <label>
+                                <input type="number" id="search-limit" value="10" min="1" max="50" class="small-input">
+                                results
+                            </label>
+                            <label>
+                                <input type="text" id="url-filter" placeholder="Filter by URL..." class="small-input">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="action-card">
+                        <h3><i class="fas fa-plus"></i> Scrape New URL</h3>
+                        <div class="scrape-form">
+                            <input type="text" id="scrape-url" placeholder="https://example.com" class="url-input">
+                            <button onclick="scrapeUrl()" class="btn btn-success">
+                                <i class="fas fa-download"></i> Scrape
+                            </button>
+                        </div>
+                        <div class="scrape-options">
+                            <label>
+                                <input type="checkbox" id="extract-links"> Extract links
+                            </label>
+                            <label>
+                                Max depth: <input type="number" id="max-depth" value="2" min="1" max="5" class="tiny-input">
+                            </label>
+                        </div>
+                        <div class="ai-controls" style="margin-top: 10px;">
+                            <label class="ai-control">
+                                <input type="checkbox" id="use-ai"> Use AI
+                            </label>
+                            <label class="ai-control">
+                                <input type="checkbox" id="analyze-first"> Analyze first
+                            </label>
+                            <label class="ai-control">
+                                <input type="checkbox" id="self-improving"> Self-improving
+                            </label>
+                            <button onclick="analyzeUrl()" class="btn btn-info btn-small ai-control">
+                                <i class="fas fa-brain"></i> Analyze URL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search Results -->
+            <section class="section" id="search-section" style="display: none;">
+                <h2><i class="fas fa-list"></i> Search Results</h2>
+                <div id="search-results" class="results-container"></div>
+            </section>
+
+            <!-- AI Analysis Results -->
+            <section class="section" id="ai-analysis-section" style="display: none;">
+                <h2><i class="fas fa-brain"></i> AI Analysis Results</h2>
+                <div id="ai-analysis-results" class="analysis-container"></div>
+            </section>
+
+            <!-- Configured Sources -->
+            <section class="section">
+                <h2><i class="fas fa-sitemap"></i> Configured Sources</h2>
+                <div id="sources-container" class="sources-grid">
+                    <div class="loading">Loading sources...</div>
+                </div>
+                <button onclick="refreshSources()" class="btn btn-secondary">
+                    <i class="fas fa-refresh"></i> Refresh Sources
+                </button>
+            </section>
+
+            <!-- Recent Activity -->
+            <section class="section">
+                <h2><i class="fas fa-clock"></i> Recent Activity</h2>
+                <div id="activity-log" class="activity-container">
+                    <div class="activity-item">
+                        <span class="activity-time">Just now</span>
+                        <span class="activity-text">Dashboard loaded</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- System Status -->
+            <section class="section">
+                <h2><i class="fas fa-heartbeat"></i> System Status</h2>
+                <div class="status-grid">
+                    <div class="status-card">
+                        <h4>Vector Store</h4>
+                        <div id="vector-store-status" class="status-indicator">-</div>
+                    </div>
+                    <div class="status-card">
+                        <h4>API Server</h4>
+                        <div class="status-indicator status-healthy">Healthy</div>
+                    </div>
+                    <div class="status-card">
+                        <h4>AI Status</h4>
+                        <div id="ai-status" class="status-indicator">-</div>
+                    </div>
+                    <div class="status-card">
+                        <h4>Uptime</h4>
+                        <div id="uptime" class="status-value">-</div>
+                    </div>
+                    <div class="status-card">
+                        <h4>Version</h4>
+                        <div class="status-value">0.1.0</div>
+                    </div>
+                    <div class="status-card">
+                        <h4>AI Provider</h4>
+                        <div id="ai-provider" class="status-value">-</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Statistics -->
+            <section class="section ai-control">
+                <h2><i class="fas fa-chart-bar"></i> AI Statistics</h2>
+                <div id="ai-stats-container" class="ai-stats">
+                    <div class="loading">Loading AI statistics...</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Toast Notifications -->
+        <div id="toast-container" class="toast-container"></div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay" style="display: none;">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Processing...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

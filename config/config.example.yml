@@ -1,0 +1,211 @@
+# Configuration template for Scrape Store Agents
+# Copy this file to config.yml and update with your actual values
+# The config.yml file will be gitignored to protect your API keys
+
+# API Keys for AI services
+api:
+  # OpenAI API key for GPT models
+  # Get from: https://platform.openai.com/api-keys
+  openai_api_key: "your-openai-api-key-here"
+  
+  # Anthropic API key for Claude models  
+  # Get from: https://console.anthropic.com/
+  anthropic_api_key: "your-anthropic-api-key-here"
+
+# AI Agent Configuration
+ai:
+  # AI provider: "openai" or "anthropic"
+  provider: "openai"
+  
+  # Model to use:
+  # OpenAI: "gpt-4", "gpt-4-turbo", "gpt-3.5-turbo"
+  # Anthropic: "claude-3-sonnet", "claude-3-haiku", "claude-3-opus"
+  model: "gpt-4"
+  
+  # Temperature for AI responses (0.0 = deterministic, 1.0 = creative)
+  temperature: 0.1
+  
+  # Maximum tokens in AI responses
+  max_tokens: 1500
+  
+  # Enable AI-powered features
+  reasoning_agent: true
+  intelligent_router: true
+  
+  # Cache AI analyses to reduce API calls
+  cache_analyses: true
+
+# Web Scraper Configuration
+scraper:
+  # Default timeout for web requests (seconds)
+  timeout: 30
+  
+  # Maximum scraping depth for following links
+  max_depth: 2
+  
+  # Whether to extract and follow links by default
+  extract_links: false
+  
+  # Maximum content length to process (bytes)
+  max_content_length: 10485760  # 10MB
+  
+  # Default user agent string
+  user_agent: "Mozilla/5.0 (compatible; ScrapeStoreAgent/1.0)"
+  
+  # Delay between requests to be respectful (seconds)
+  delay_between_requests: 1.0
+  
+  # Maximum number of retry attempts
+  max_retries: 3
+  
+  # Domains to allow (empty = allow all)
+  allowed_domains: []
+  
+  # Domains to block
+  blocked_domains: []
+  
+  # CSS selectors for content extraction
+  content_selectors:
+    - "main"
+    - "article" 
+    - ".content"
+    - ".post-content"
+    - ".entry-content"
+    - ".article-body"
+    - ".story-body"
+    - "#content"
+  
+  # CSS selectors for title extraction
+  title_selectors:
+    - "h1"
+    - "title"
+    - ".title"
+    - ".headline"
+    - ".post-title"
+  
+  # Elements to remove from content
+  remove_selectors:
+    - "script"
+    - "style"
+    - "nav"
+    - "header"
+    - "footer"
+    - ".sidebar"
+    - ".navigation"
+    - ".menu"
+    - ".ads"
+    - ".advertisement"
+    - ".social-share"
+
+# Vector Store Configuration
+vector_store:
+  # Vector store type: "chromadb" (more types coming)
+  type: "chromadb"
+  
+  # Collection name for storing documents
+  collection_name: "scraped_documents"
+  
+  # Directory to persist vector data
+  persist_directory: "./data/chroma"
+  
+  # Embedding model for text vectorization
+  embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+  
+  # Chunk size for document splitting
+  chunk_size: 1000
+  
+  # Chunk overlap for better context
+  chunk_overlap: 200
+
+# API Server Configuration
+api:
+  # Host to bind the API server
+  host: "0.0.0.0"
+  
+  # Port for the API server
+  port: 8000
+  
+  # Enable debug mode (disable in production)
+  debug: false
+  
+  # API documentation title
+  title: "Scrape Store Agents API"
+  
+  # API version
+  version: "1.0.0"
+  
+  # CORS settings
+  cors:
+    allow_origins: ["*"]
+    allow_credentials: true
+    allow_methods: ["*"]
+    allow_headers: ["*"]
+
+# Logging Configuration
+logging:
+  # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  level: "INFO"
+  
+  # Log format
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # Log file path (optional, logs to console if not specified)
+  file: "./logs/scrape_store_agents.log"
+  
+  # Maximum log file size in MB
+  max_file_size: 10
+  
+  # Number of backup log files to keep
+  backup_count: 5
+
+# Scraping Sources (can be managed via web interface)
+sources:
+  # Example source configuration
+  - name: "python-docs"
+    url: "https://docs.python.org/3/"
+    enabled: false
+    description: "Official Python 3 documentation"
+    schedule: "0 2 * * 0"  # Weekly on Sunday at 2 AM
+    custom_config:
+      max_depth: 3
+      extract_links: true
+      content_selectors:
+        - ".body"
+        - ".section"
+  
+  - name: "example-blog"
+    url: "https://example-blog.com"
+    enabled: false
+    description: "Example blog for demonstration"
+    schedule: "0 */6 * * *"  # Every 6 hours
+    custom_config:
+      max_depth: 1
+      extract_links: false
+
+# Performance Settings
+performance:
+  # Maximum concurrent scraping tasks
+  max_concurrent_scrapes: 5
+  
+  # Request rate limiting (requests per second)
+  rate_limit: 2.0
+  
+  # Memory limit for document processing (MB)
+  memory_limit: 512
+  
+  # Enable performance monitoring
+  monitoring: true
+
+# Security Settings
+security:
+  # Enable request validation
+  validate_requests: true
+  
+  # Maximum request size (MB)
+  max_request_size: 100
+  
+  # Allowed file upload types
+  allowed_upload_types: [".txt", ".md", ".pdf"]
+  
+  # Enable rate limiting for API endpoints
+  api_rate_limiting: true

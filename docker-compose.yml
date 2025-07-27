@@ -1,0 +1,106 @@
+version: '3.8'
+
+services:
+  # Main application (includes API + Web UI)
+  scrape-store-agents:
+    build: .
+    ports:
+      - "8000:8000"  # API + Web Dashboard
+    volumes:
+      - ./config:/home/app/config:ro
+      - ./data:/home/app/data
+      - ./logs:/home/app/logs
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - VECTOR_STORE_PERSIST_DIR=/home/app/data/chroma
+      - LOG_LEVEL=INFO
+      - LOG_FILE=/home/app/logs/scrape-store-agents.log
+    depends_on:
+      - chromadb
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ChromaDB vector database (optional - can use embedded mode instead)
+  chromadb:
+    image: chromadb/chroma:latest
+    ports:
+      - "8001:8000"
+    volumes:
+      - chromadb_data:/chroma/chroma
+    environment:
+      - CHROMA_SERVER_AUTHN_CREDENTIALS_FILE=/chroma/chroma
+      - CHROMA_SERVER_AUTHN_PROVIDER=chromadb.auth.token.TokenAuthServerProvider
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Web UI for ChromaDB (optional)
+  chromadb-ui:
+    image: chromadb/chroma:latest
+    ports:
+      - "8002:8000"
+    environment:
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8000
+    depends_on:
+      - chromadb
+    restart: unless-stopped
+    profiles:
+      - ui
+
+  # Nginx reverse proxy (optional)
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - scrape-store-agents
+    restart: unless-stopped
+    profiles:
+      - production
+
+  # Scheduler for automatic scraping (optional)
+  scheduler:
+    build: .
+    volumes:
+      - ./config:/home/app/config:ro
+      - ./data:/home/app/data
+      - ./logs:/home/app/logs
+    environment:
+      - VECTOR_STORE_PERSIST_DIR=/home/app/data/chroma
+      - LOG_LEVEL=INFO
+    depends_on:
+      - scrape-store-agents
+    command: >
+      bash -c "
+        while true; do
+          echo 'Running scheduled scraping...'
+          python -m scrape_store_agents.cli run --all
+          echo 'Waiting 6 hours...'
+          sleep 21600
+        done
+      "
+    restart: unless-stopped
+    profiles:
+      - scheduler
+
+volumes:
+  chromadb_data:
+    driver: local
+
+networks:
+  default:
+    name: scrape-store-agents-network
