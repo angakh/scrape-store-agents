@@ -201,13 +201,25 @@ class Dashboard {
             }
 
             const response = await fetch(`${this.apiBase}/search?${params}`);
+            if (!response.ok) {
+                // Try to extract error message from backend
+                let errorMsg = 'Search failed';
+                try {
+                    const errorData = await response.json();
+                    if (errorData && errorData.detail) {
+                        errorMsg = errorData.detail;
+                    }
+                } catch (e) {}
+                this.displaySearchResults({ results: [], query, total_results: 0, execution_time_ms: 0 });
+                this.showToast(errorMsg, 'error');
+                return;
+            }
             const data = await response.json();
-
             this.displaySearchResults(data);
             this.addActivity(`Searched for: "${query}" (${data.total_results} results)`);
-
         } catch (error) {
             console.error('Error performing search:', error);
+            this.displaySearchResults({ results: [], query, total_results: 0, execution_time_ms: 0 });
             this.showToast('Search failed', 'error');
         } finally {
             this.showLoading(false);
